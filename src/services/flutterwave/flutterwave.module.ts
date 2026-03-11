@@ -7,5 +7,6 @@ import {HttpModule} from "@nestjs/axios"
   imports: [HttpModule],
   controllers: [FlutterwaveController],
   providers: [FlutterwaveService],
+  exports: [FlutterwaveService]
 })
 export class FlutterwaveModule {}

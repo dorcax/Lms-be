@@ -18,6 +18,8 @@ import { LessonsModule } from './module/lessons/lessons.module';
 import { FlutterwaveModule } from './services/flutterwave/flutterwave.module';
 import { CartsModule } from './module/carts/carts.module';
 import { OrderModule } from './module/order/order.module';
+import { WebhookModule } from './module/webhook/webhook.module';
+import { LearningModule } from './module/learning/learning.module';
 
 @Module({
   imports: [
@@ -40,6 +42,8 @@ import { OrderModule } from './module/order/order.module';
     FlutterwaveModule,
     CartsModule,
     OrderModule,
+    WebhookModule,
+    LearningModule,
   ],
   controllers: [AppController],
   providers: [AppService],

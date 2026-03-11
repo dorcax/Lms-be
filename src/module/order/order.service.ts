@@ -1,12 +1,15 @@
 import { Injectable } from '@nestjs/common';
 import { connectId } from 'prisma/prisma.util';
+import { FlutterwaveService } from 'src/services/flutterwave/flutterwave.service';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { bad } from 'src/utils/errors';
 import { v4 } from 'uuid';
 
 @Injectable()
 export class OrderService {
-  constructor(private readonly prismaService: PrismaService) {}
+  constructor(private readonly prismaService: PrismaService,
+    private readonly flutterwaveService: FlutterwaveService
+  ) {}
 
   async orderCheckOut(cartId: string, billingAddress: string) {
     // find if the cart exist
@@ -23,7 +26,7 @@ export class OrderService {
     });
     if (!cart || cart?.items.length === 0) bad('cart not found');
 
-    await this.prismaService.$transaction(async (tx) => {
+   const result= await this.prismaService.$transaction(async (tx) => {
       const totalAmount = cart.items.reduce(
         (total, item) => total + item.course.price,
         0,
@@ -54,9 +57,11 @@ export class OrderService {
         where: { cartId: cart.id },
       });
 
-    //   initiate payment  
+    //   initiate payment
+    await this.flutterwaveService.initiatePayment({ orderId: order.id });
       return order;
     });
+    return result;
   }
 
 

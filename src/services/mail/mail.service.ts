@@ -38,4 +38,48 @@ export class MailService {
   });
 }
 
+
+ async sendOrderToStudentMail<T extends Record<string, any>>(
+  to: string,
+  subject: string,
+  Template: React.ComponentType<T>, 
+  props: T                          
+) {
+//   const html = renderToStaticMarkup(<Template {...props} />);
+  const html = renderToStaticMarkup(React.createElement(Template, props));
+
+  
+  await this.resend.emails.send({
+    from: 
+    // this.configService.get<string>('RESEND_FROM_EMAIL')
+    //  ||
+      'onboarding@resend.dev',
+    to,
+    subject,
+    html,
+    
+  });
+}
+
+ async sendOrderNotificationMailToInstructor<T extends Record<string, any>>(
+  to: string,
+  subject: string,
+  Template: React.ComponentType<T>, 
+  props: T                          
+) {
+//   const html = renderToStaticMarkup(<Template {...props} />);
+  const html = renderToStaticMarkup(React.createElement(Template, props));
+
+  
+  await this.resend.emails.send({
+    from: 
+   
+      'onboarding@resend.dev',
+    to,
+    subject,
+    html,
+    
+  });
+}
+
 }

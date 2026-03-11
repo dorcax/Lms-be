@@ -65,7 +65,7 @@ model User {
   orders       Order[]
   progress     Progress[]
   uploads      Upload[]
-  payments     Payment[]
+  
   quizAttempts QuizAttempt[]
 
   certificates  Certificate[]
@@ -156,7 +156,7 @@ model Course {
   modules       CourseModule[]
   enrollments   Enrollment[]
 
-  payments      Payment[]
+
   certificates  Certificate[]
   quizzes       Quiz[]
   reviews       Review[]
@@ -267,16 +267,18 @@ model OrderItem {
 
 model Payment {
   id        String        @id @default(uuid())
-  studentId String
-  courseId  String
+ 
+  
   amount    Float
   status    PaymentStatus @default(PENDING)
   createdAt DateTime      @default(now())
+  referenceId String?  
 
   order   Order  @relation(fields: [orderId], references: [id])
   orderId String @unique
-  student User   @relation(fields: [studentId], references: [id])
-  course  Course @relation(fields: [courseId], references: [id])
+  transactions Transaction[]
+
+  @@unique([referenceId])
 }
 
 
@@ -294,6 +296,7 @@ model Quiz {
   questions Question[]
   attempts  QuizAttempt[]
 }
+
 
 model Question {
   id      String     @id @default(uuid())
@@ -360,6 +363,7 @@ model Progress {
 
   lesson  Lesson @relation(fields: [lessonId], references: [id])
   student User   @relation(fields: [studentId], references: [id])
+  @@unique([studentId,lessonId])
 }
 
 model Review {
@@ -403,7 +407,7 @@ model Transaction {
 
   amount            Float
  
-  status            TransactionStatus
+  status            TransactionStatus @default(PENDING)
   referenceId       String            @unique
   paymentReference  String?
   originatorName    String?
@@ -411,4 +415,6 @@ model Transaction {
   bankName          String?
   narration         String?
   createdAt         DateTime          @default(now())
+   paymentId String
+  payment   Payment @relation(fields: [paymentId], references: [id])
 }

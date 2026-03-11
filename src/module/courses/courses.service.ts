@@ -99,7 +99,12 @@ async getAllCoursesByInstructor(user:userEntity){
       include: {
         instructor: true,
         courseUpload: true,
-        modules: { include: { lessons: true } },
+        modules: { include: { lessons:{
+          select:{
+            title:true
+          }
+        }
+        }} ,
       },
     });
 

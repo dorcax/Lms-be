@@ -1,10 +1,9 @@
-import { IsNumber } from "class-validator";
+import { IsString } from "class-validator";
 
 export class CreatePaymentDto{
-    @IsNumber()
-    amount:number
+ 
 
-    
-
+    @IsString()
+   orderId:string
 
 }
