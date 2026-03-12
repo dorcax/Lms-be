@@ -59,13 +59,13 @@ model User {
   deletedAt    DateTime?
 
   // Relations
-  profile      Profile?
-  courses      Course[]      @relation("InstructorCourses")
-  enrollments  Enrollment[]
-  orders       Order[]
-  progress     Progress[]
-  uploads      Upload[]
-  
+  profile     Profile?
+  courses     Course[]     @relation("InstructorCourses")
+  enrollments Enrollment[]
+  orders      Order[]
+  progress    Progress[]
+  uploads     Upload[]
+
   quizAttempts QuizAttempt[]
 
   certificates  Certificate[]
@@ -75,6 +75,7 @@ model User {
   authOtpTokens AuthOtpToken[]
   transactions  Transaction[]
   carts         Cart?
+  announcements Announcement[]
 }
 
 enum AuthOtpTokenType {
@@ -151,11 +152,10 @@ model Course {
   deletedAt    DateTime?
   courseUpload Upload[]
 
-  instructor    User           @relation("InstructorCourses", fields: [instructorId], references: [id])
-  instructorId  String
-  modules       CourseModule[]
-  enrollments   Enrollment[]
-
+  instructor   User           @relation("InstructorCourses", fields: [instructorId], references: [id])
+  instructorId String
+  modules      CourseModule[]
+  enrollments  Enrollment[]
 
   certificates  Certificate[]
   quizzes       Quiz[]
@@ -249,7 +249,6 @@ model Order {
 
   payment    Payment?
   orderItems OrderItem[]
-
 }
 
 model OrderItem {
@@ -266,21 +265,19 @@ model OrderItem {
 }
 
 model Payment {
-  id        String        @id @default(uuid())
- 
-  
-  amount    Float
-  status    PaymentStatus @default(PENDING)
-  createdAt DateTime      @default(now())
-  referenceId String?  
+  id String @id @default(uuid())
 
-  order   Order  @relation(fields: [orderId], references: [id])
-  orderId String @unique
+  amount      Float
+  status      PaymentStatus @default(PENDING)
+  createdAt   DateTime      @default(now())
+  referenceId String?
+
+  order        Order         @relation(fields: [orderId], references: [id])
+  orderId      String        @unique
   transactions Transaction[]
 
   @@unique([referenceId])
 }
-
 
 model Quiz {
   id        String   @id @default(uuid())
@@ -296,7 +293,6 @@ model Quiz {
   questions Question[]
   attempts  QuizAttempt[]
 }
-
 
 model Question {
   id      String     @id @default(uuid())
@@ -343,11 +339,13 @@ model Notification {
 }
 
 model Announcement {
-  id        String   @id @default(uuid())
-  courseId  String?
-  title     String
-  message   String
-  createdAt DateTime @default(now())
+  id           String   @id @default(uuid())
+  courseId     String?
+  title        String
+  message      String
+  createdAt    DateTime @default(now())
+  instructor   User     @relation(fields: [instructorId], references: [id])
+  instructorId String
 
   course Course? @relation(fields: [courseId], references: [id])
 }
@@ -363,7 +361,8 @@ model Progress {
 
   lesson  Lesson @relation(fields: [lessonId], references: [id])
   student User   @relation(fields: [studentId], references: [id])
-  @@unique([studentId,lessonId])
+
+  @@unique([studentId, lessonId])
 }
 
 model Review {
@@ -405,8 +404,8 @@ model Transaction {
   user   User   @relation(fields: [userId], references: [id])
   userId String
 
-  amount            Float
- 
+  amount Float
+
   status            TransactionStatus @default(PENDING)
   referenceId       String            @unique
   paymentReference  String?
@@ -415,6 +414,6 @@ model Transaction {
   bankName          String?
   narration         String?
   createdAt         DateTime          @default(now())
-   paymentId String
-  payment   Payment @relation(fields: [paymentId], references: [id])
+  paymentId         String
+  payment           Payment           @relation(fields: [paymentId], references: [id])
 }

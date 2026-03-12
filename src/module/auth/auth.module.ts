@@ -1,10 +1,13 @@
-import { Module } from '@nestjs/common';
+import { Global, Module } from '@nestjs/common';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { PrismaService } from 'src/services/prisma/prisma.service';
 import { AuthOtpTokenModule } from 'src/services/auth-otp-token/auth-otp-token.module';
 import{JwtModule} from "@nestjs/jwt"
 import { ConfigModule, ConfigService } from '@nestjs/config';
+import { AuthGuard } from './guards/authGuard';
+
+@Global()
 @Module({
 imports: [
   AuthOtpTokenModule,
@@ -18,6 +21,7 @@ imports: [
   }),
 ],
   controllers: [AuthController],
-  providers: [AuthService, PrismaService]
+  providers: [AuthService, PrismaService,AuthGuard],
+  exports:[AuthGuard,JwtModule]
 })
 export class AuthModule {}

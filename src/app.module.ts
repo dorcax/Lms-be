@@ -20,6 +20,11 @@ import { CartsModule } from './module/carts/carts.module';
 import { OrderModule } from './module/order/order.module';
 import { WebhookModule } from './module/webhook/webhook.module';
 import { LearningModule } from './module/learning/learning.module';
+import { QuizModule } from './module/quiz/quiz.module';
+import { ReviewModule } from './module/review/review.module';
+import { CommentModule } from './module/comment/comment.module';
+import { CertificateModule } from './module/certificate/certificate.module';
+import { AnnouncementModule } from './module/announcement/announcement.module';
 
 @Module({
   imports: [
@@ -44,6 +49,11 @@ import { LearningModule } from './module/learning/learning.module';
     OrderModule,
     WebhookModule,
     LearningModule,
+    QuizModule,
+    ReviewModule,
+    CommentModule,
+    CertificateModule,
+    AnnouncementModule,
   ],
   controllers: [AppController],
   providers: [AppService],
